@@ -4,7 +4,7 @@ const Garden = () => {
   return (
     <div>
       <h2>Your Garden</h2>
-      <Link to={'details'}>details of plant</Link>
+      <Link to={'plant'}>Details about plant</Link>
     </div>
   );
 };

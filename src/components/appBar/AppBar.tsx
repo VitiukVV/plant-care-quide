@@ -5,10 +5,9 @@ const AppBar = () => {
   return (
     <>
       <header>
-        <nav>
+        <nav style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
           <NavLink to="/">Home</NavLink>
-          <NavLink to="add">+</NavLink>
-          <NavLink to="schedule">Schedule</NavLink>
+          <NavLink to="garden">Garden</NavLink>
         </nav>
       </header>
       <main>
