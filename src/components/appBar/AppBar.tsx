@@ -4,18 +4,17 @@ import { NavLink, Outlet } from 'react-router-dom';
 const AppBar = () => {
   return (
     <>
+      <header>
+        <nav style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="garden">Garden</NavLink>
+        </nav>
+      </header>
       <main>
         <Suspense fallback={<div>Loading...</div>}>
           <Outlet />
         </Suspense>
       </main>
-      <footer>
-        <nav>
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/add">+</NavLink>
-          <NavLink to="/schedule">Schedule</NavLink>
-        </nav>
-      </footer>
     </>
   );
 };
