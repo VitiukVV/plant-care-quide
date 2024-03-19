@@ -6,17 +6,17 @@ import Home from './pages/home/Home';
 const Details = lazy(() => import('./pages/details/Details'));
 const Garden = lazy(() => import('./pages/garden/Garden'));
 
-export type DataItem = {
+export interface DataItem {
   commonName: string;
   botanicName: string;
   room: string;
-};
+}
 
-type PlantsListType = {
+interface PlantsListType {
   data: DataItem[];
   addPlant: (newData: DataItem[]) => void;
   removePlant: (plantIndex: number) => void;
-};
+}
 
 export const PlantsList = createContext<PlantsListType>({
   data: [],

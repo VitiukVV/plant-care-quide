@@ -2,10 +2,10 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { DataItem, PlantsList } from '../App';
 
-type PlantsListCardProps = {
+interface PlantsListCardProps {
   plantData: DataItem;
   index: number;
-};
+}
 
 const PlantsListCard = ({ plantData, index }: PlantsListCardProps) => {
   const plantsList = useContext(PlantsList);

@@ -4,11 +4,11 @@ import { rooms } from '../../data/rooms';
 import sprite from '../../icons/symbol-defs.svg';
 import { PlantsList } from '../App';
 
-type AddPlantProps = {
+interface Props {
   onClose: () => void;
-};
+}
 
-const AddPlant: React.FC<AddPlantProps> = ({ onClose }) => {
+const AddPlant: React.FC<Props> = ({ onClose }) => {
   const [selectedCommonName, setSelectedCommonName] = useState<string>('');
   const [selectedBotanicName, setSelectedBotanicName] = useState<string>(
     plantBotanicNames[0]
@@ -32,9 +32,11 @@ const AddPlant: React.FC<AddPlantProps> = ({ onClose }) => {
         setSelectedRoom(e.target.value);
         break;
       default:
+        console.error(`Unhandled input name: ${name}`);
         break;
     }
   };
+
   const handleSubmit = (event: FormEvent): void => {
     event.preventDefault();
     plantsListData.addPlant([
