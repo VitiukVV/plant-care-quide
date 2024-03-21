@@ -1,8 +1,10 @@
-import { ChangeEvent, FormEvent, useContext, useState } from 'react';
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { plantBotanicNames } from '../../data/plantBotanicNames';
 import { rooms } from '../../data/rooms';
 import sprite from '../../icons/symbol-defs.svg';
 import { PlantsList } from '../App';
+import { API_KEY, API_KEY_2 } from '../API/Api';
+import axios, { AxiosError } from 'axios';
 
 interface Props {
   onClose: () => void;
@@ -14,6 +16,10 @@ const AddPlant: React.FC<Props> = ({ onClose }) => {
     plantBotanicNames[0]
   );
   const [selectedRoom, setSelectedRoom] = useState<string>(rooms[0]);
+  const [plantId, setPlantId] = useState<number>(0);
+  const [plantImgUrl, setPlantImgUrl] = useState<string>(
+    'https://perenual.com/storage/image/missing_image.jpg'
+  );
 
   const plantsListData = useContext(PlantsList);
 
@@ -37,6 +43,40 @@ const AddPlant: React.FC<Props> = ({ onClose }) => {
     }
   };
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(
+          `https://perenual.com/api/species-list?key=${API_KEY}&q=${encodeURIComponent(
+            selectedBotanicName
+          )}`
+        );
+
+        setPlantId(response.data.data[0].id);
+        setPlantImgUrl(response.data.data[0].default_image.thumbnail);
+      } catch (error: unknown) {
+        if ((error as AxiosError).response?.status === 429) {
+          // if we get a 429 status code from the API, use another API_KEY
+          try {
+            const response = await axios.get(
+              `https://perenual.com/api/species-list?key=${API_KEY_2}&q=${encodeURIComponent(
+                selectedBotanicName
+              )}`
+            );
+            setPlantId(response.data.data[0].id);
+            setPlantImgUrl(response.data.data[0].default_image.thumbnail);
+          } catch (err) {
+            console.error('Error fetching data:', err);
+          }
+        } else {
+          console.error('Error fetching data:', error);
+        }
+      }
+    }
+
+    fetchData();
+  }, [plantId, selectedBotanicName]);
+
   const handleSubmit = (event: FormEvent): void => {
     event.preventDefault();
     plantsListData.addPlant([
@@ -44,6 +84,8 @@ const AddPlant: React.FC<Props> = ({ onClose }) => {
         commonName: selectedCommonName,
         botanicName: selectedBotanicName,
         room: selectedRoom,
+        plantID: plantId,
+        plantImgUrl,
       },
     ]);
     onClose();

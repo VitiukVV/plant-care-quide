@@ -12,6 +12,11 @@ const PlantsListCard = ({ plantData, index }: PlantsListCardProps) => {
 
   return (
     <li>
+      <img
+        src={plantData.plantImgUrl}
+        alt={plantData.botanicName}
+        loading="lazy"
+      />
       <h3>{plantData.commonName}</h3>
       <p>{plantData.botanicName}</p>
       <p>in {plantData.room}</p>

@@ -10,6 +10,8 @@ export interface DataItem {
   commonName: string;
   botanicName: string;
   room: string;
+  plantID: number;
+  plantImgUrl: string;
 }
 
 interface PlantsListType {
