@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { API_KEY } from '../../API/Api';
 
 const Details = () => {
   // test API
   const [data, setData] = useState(null);
   const ID = '1';
+  const API_KEY = import.meta.env.VITE_API_KEY;
 
   useEffect(() => {
     async function fetchData() {
