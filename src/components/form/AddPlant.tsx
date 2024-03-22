@@ -1,10 +1,22 @@
+import CloseIcon from '@mui/icons-material/Close';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from '@mui/material';
+import axios, { AxiosError } from 'axios';
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { plantBotanicNames } from '../../data/plantBotanicNames';
 import { rooms } from '../../data/rooms';
-import CloseIcon from '@mui/icons-material/Close';
 import { PlantsList } from '../App';
-import { API_KEY, API_KEY_2 } from '../API/Api';
-import axios, { AxiosError } from 'axios';
+import { useTheme } from '@mui/material/styles';
+const API_KEY_2 = import.meta.env.VITE_API_KEY_2;
+const API_KEY = import.meta.env.VITE_API_KEY_3;
 
 interface Props {
   onClose: () => void;
@@ -22,15 +34,15 @@ const AddPlant: React.FC<Props> = ({ onClose }) => {
   );
 
   const plantsListData = useContext(PlantsList);
+  const theme = useTheme();
 
-  const handleSelect = (
-    e: ChangeEvent<HTMLSelectElement | HTMLInputElement>
-  ): void => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSelectedCommonName(e.target.value);
+  };
+
+  const handleSelectChange = (e: SelectChangeEvent<string>) => {
     const { name } = e.target;
     switch (name) {
-      case 'commonName':
-        setSelectedCommonName(e.target.value);
-        break;
       case 'botanicName':
         setSelectedBotanicName(e.target.value);
         break;
@@ -92,78 +104,82 @@ const AddPlant: React.FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         position: 'relative',
         padding: '40px',
         background: '#fff',
         borderRadius: '24px',
-        width: '540px',
+        [theme.breakpoints.between('md', 'lg')]: {
+          width: '540px',
+        },
       }}
     >
-      <button
-        style={{
+      <Button
+        sx={{
           width: '24px',
           height: '24px',
           position: 'absolute',
           right: '16px',
           top: '16px',
-          padding: 0,
-          margin: 0,
           backgroundColor: 'transparent',
-          border: 'none',
         }}
         type="button"
         onClick={onClose}
       >
         <CloseIcon />
-      </button>
+      </Button>
       <form autoComplete="off" onSubmit={handleSubmit}>
-        <label>
-          Whats the name of your plant?
-          <input
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            label="Whats the name of your plant?"
             name="commonName"
-            onChange={handleSelect}
+            onChange={handleInputChange}
             type="text"
             required
           />
-        </label>
-        <br />
-        <label>
-          Botanical Name
-          <select
-            name="botanicName"
-            value={selectedBotanicName}
-            onChange={handleSelect}
-            required
+          <FormControl>
+            <InputLabel>Botanical Name</InputLabel>
+            <Select
+              name="botanicName"
+              label="Botanical Name"
+              value={selectedBotanicName}
+              onChange={handleSelectChange}
+              required
+            >
+              {plantBotanicNames.map((name, index) => (
+                <MenuItem key={index} value={name}>
+                  {name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl>
+            <InputLabel>Room</InputLabel>
+            <Select
+              name="room"
+              label="room"
+              value={selectedRoom}
+              onChange={handleSelectChange}
+              required
+            >
+              {rooms.map((room, index) => (
+                <MenuItem key={index} value={room}>
+                  {room}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: theme.palette.primary.main, color: 'white' }}
+            type="submit"
           >
-            {plantBotanicNames.map((name, index) => (
-              <option key={index} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <br />
-        <label>
-          Room
-          <select
-            name="room"
-            value={selectedRoom}
-            onChange={handleSelect}
-            required
-          >
-            {rooms.map((room, index) => (
-              <option key={index} value={room}>
-                {room}
-              </option>
-            ))}
-          </select>
-        </label>
-        <br />
-        <button>Add to my Garden</button>
+            Add to my Garden
+          </Button>
+        </Box>
       </form>
-    </div>
+    </Box>
   );
 };
 
