@@ -1,6 +1,6 @@
-import { useCallback, useEffect, ReactElement, MouseEvent } from 'react';
+import { Box } from '@mui/material';
+import { MouseEvent, ReactElement, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import css from './Modal.module.css';
 
 type ModalProps = {
   onClose: () => void;
@@ -32,9 +32,31 @@ const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
   }, [handleCloseModal]);
 
   return createPortal(
-    <div className={css.modalBackdrop} onClick={handleCloseModal}>
-      <div className={css.modalContent}>{children}</div>
-    </div>,
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: ' rgba(0, 0, 0, 0.8)',
+        zIndex: 1200,
+      }}
+      onClick={handleCloseModal}
+    >
+      <Box
+        sx={{
+          overflowX: 'auto',
+          maxWidth: 'calc(100vw - 48px)',
+          maxHeight: 'calc(100vh - 24px)',
+        }}
+      >
+        {children}
+      </Box>
+    </Box>,
     modalRoot as Element
   );
 };
