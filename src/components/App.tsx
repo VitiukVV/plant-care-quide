@@ -1,6 +1,6 @@
 import { createContext, lazy, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { ThemeProvider, Box } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
 import createTheme from '@mui/material/styles/createTheme';
 
 import AppBar from './appBar/AppBar';
@@ -62,22 +62,16 @@ const App = () => {
 
   return (
     <ThemeProvider theme={customColors}>
-      <Box
-        sx={{
-          marginTop: 5,
-        }}
-      >
-        <PlantsList.Provider value={{ data, addPlant, removePlant }}>
-          <Routes>
-            <Route path="/" element={<AppBar />}>
-              <Route index element={<Home />} />
-              <Route path="garden" element={<Garden />} />
-              <Route path="garden/:details" element={<Details />} />
-              <Route path="*" element={<Home />} />
-            </Route>
-          </Routes>
-        </PlantsList.Provider>
-      </Box>
+      <PlantsList.Provider value={{ data, addPlant, removePlant }}>
+        <Routes>
+          <Route path="/" element={<AppBar />}>
+            <Route index element={<Home />} />
+            <Route path="garden" element={<Garden />} />
+            <Route path="garden/:details" element={<Details />} />
+            <Route path="*" element={<Home />} />
+          </Route>
+        </Routes>
+      </PlantsList.Provider>
     </ThemeProvider>
   );
 };
