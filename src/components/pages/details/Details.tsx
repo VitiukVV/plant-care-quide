@@ -20,7 +20,7 @@ const Details = () => {
     }
 
     fetchData();
-  }, []);
+  }, [API_KEY]);
 
   console.log(data);
   return (
