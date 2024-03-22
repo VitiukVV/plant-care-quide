@@ -1,10 +1,24 @@
 import { createContext, lazy, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material';
+import createTheme from '@mui/material/styles/createTheme';
+
 import AppBar from './appBar/AppBar';
 import Home from './pages/home/Home';
 
 const Details = lazy(() => import('./pages/details/Details'));
 const Garden = lazy(() => import('./pages/garden/Garden'));
+
+const customColors = createTheme({
+  palette: {
+    primary: {
+      main: '#56817A',
+      light: '#D5E8DC',
+      dark: '#005844',
+      contrastText: '#9F9E9E',
+    },
+  },
+});
 
 export interface DataItem {
   commonName: string;
@@ -47,16 +61,18 @@ const App = () => {
   };
 
   return (
-    <PlantsList.Provider value={{ data, addPlant, removePlant }}>
-      <Routes>
-        <Route path="/" element={<AppBar />}>
-          <Route index element={<Home />} />
-          <Route path="garden" element={<Garden />} />
-          <Route path="garden/:details" element={<Details />} />
-          <Route path="*" element={<Home />} />
-        </Route>
-      </Routes>
-    </PlantsList.Provider>
+    <ThemeProvider theme={customColors}>
+      <PlantsList.Provider value={{ data, addPlant, removePlant }}>
+        <Routes>
+          <Route path="/" element={<AppBar />}>
+            <Route index element={<Home />} />
+            <Route path="garden" element={<Garden />} />
+            <Route path="garden/:details" element={<Details />} />
+            <Route path="*" element={<Home />} />
+          </Route>
+        </Routes>
+      </PlantsList.Provider>
+    </ThemeProvider>
   );
 };
 
