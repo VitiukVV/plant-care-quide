@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
 import { plantBotanicNames } from '../../data/plantBotanicNames';
 import { rooms } from '../../data/rooms';
-import sprite from '../../icons/symbol-defs.svg';
+import CloseIcon from '@mui/icons-material/Close';
 import { PlantsList } from '../App';
 import { API_KEY, API_KEY_2 } from '../API/Api';
 import axios, { AxiosError } from 'axios';
@@ -116,9 +116,7 @@ const AddPlant: React.FC<Props> = ({ onClose }) => {
         type="button"
         onClick={onClose}
       >
-        <svg style={{ stroke: 'black', width: '24px', height: '24px' }}>
-          <use href={`${sprite}#icon-close`} />
-        </svg>
+        <CloseIcon />
       </button>
       <form autoComplete="off" onSubmit={handleSubmit}>
         <label>
