@@ -8,6 +8,9 @@ import Home from './pages/home/Home';
 
 const Details = lazy(() => import('./pages/details/Details'));
 const Garden = lazy(() => import('./pages/garden/Garden'));
+const Identification = lazy(
+  () => import('./pages/identification/Identification')
+);
 
 const customColors = createTheme({
   palette: {
@@ -68,6 +71,7 @@ const App = () => {
             <Route index element={<Home />} />
             <Route path="garden" element={<Garden />} />
             <Route path="garden/:details" element={<Details />} />
+            <Route path="identification" element={<Identification />} />
             <Route path="*" element={<Home />} />
           </Route>
         </Routes>
