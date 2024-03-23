@@ -9,32 +9,61 @@ import {
   SelectChangeEvent,
   TextField,
 } from '@mui/material';
-import axios, { AxiosError } from 'axios';
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
-import { plantBotanicNames } from '../../data/plantBotanicNames';
-import { rooms } from '../../data/rooms';
-import { PlantsList } from '../App';
 import { useTheme } from '@mui/material/styles';
-const API_KEY_2 = import.meta.env.VITE_API_KEY_2;
-const API_KEY = import.meta.env.VITE_API_KEY_3;
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import { rooms } from '../../data/rooms';
+import {
+  fetchBotanicPlantDetails,
+  fetchBotanicPlantNames,
+} from '../../services/serviceAPI';
+import { PlantsList } from '../App';
 
 interface Props {
   onClose: () => void;
 }
 
 const AddPlant: React.FC<Props> = ({ onClose }) => {
-  const [selectedCommonName, setSelectedCommonName] = useState<string>('');
-  const [selectedBotanicName, setSelectedBotanicName] = useState<string>(
-    plantBotanicNames[0]
-  );
-  const [selectedRoom, setSelectedRoom] = useState<string>(rooms[0]);
-  const [plantId, setPlantId] = useState<number>(0);
-  const [plantImgUrl, setPlantImgUrl] = useState<string>(
-    'https://perenual.com/storage/image/missing_image.jpg'
-  );
-
   const plantsListData = useContext(PlantsList);
   const theme = useTheme();
+
+  const [selectedCommonName, setSelectedCommonName] = useState<string>('');
+  const [botanicNames, setBotanicNames] = useState<string[]>([]);
+  const [selectedBotanicName, setSelectedBotanicName] = useState<string>('');
+  const [selectedRoom, setSelectedRoom] = useState<string>(rooms[0]);
+  const [plantId, setPlantId] = useState<number>(0);
+  const [plantImgUrl, setPlantImgUrl] = useState<string>('');
+
+  useEffect(() => {
+    const getBotanicNames = async () => {
+      const result = await fetchBotanicPlantNames();
+      setBotanicNames(result[0].plantBotanicNames);
+    };
+
+    getBotanicNames();
+  }, []);
+
+  useEffect(() => {
+    const getBotanicPlantNames = async (selectedBotanicName: string) => {
+      try {
+        const result = await fetchBotanicPlantDetails(selectedBotanicName);
+
+        if (result.data.default_image && result.data.default_image.thumbnail) {
+          setPlantId(result.id);
+          setPlantImgUrl(result.data.default_image.thumbnail);
+        } else {
+          // If there is no thumbnail, we set the standard value
+          setPlantId(result.id);
+          setPlantImgUrl(
+            'https://perenual.com/storage/image/missing_image.jpg'
+          );
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    getBotanicPlantNames(selectedBotanicName);
+  }, [selectedBotanicName]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedCommonName(e.target.value);
@@ -54,40 +83,6 @@ const AddPlant: React.FC<Props> = ({ onClose }) => {
         break;
     }
   };
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get(
-          `https://perenual.com/api/species-list?key=${API_KEY}&q=${encodeURIComponent(
-            selectedBotanicName
-          )}`
-        );
-
-        setPlantId(response.data.data[0].id);
-        setPlantImgUrl(response.data.data[0].default_image.thumbnail);
-      } catch (error: unknown) {
-        if ((error as AxiosError).response?.status === 429) {
-          // if we get a 429 status code from the API, use another API_KEY
-          try {
-            const response = await axios.get(
-              `https://perenual.com/api/species-list?key=${API_KEY_2}&q=${encodeURIComponent(
-                selectedBotanicName
-              )}`
-            );
-            setPlantId(response.data.data[0].id);
-            setPlantImgUrl(response.data.data[0].default_image.thumbnail);
-          } catch (err) {
-            console.error('Error fetching data:', err);
-          }
-        } else {
-          console.error('Error fetching data:', error);
-        }
-      }
-    }
-
-    fetchData();
-  }, [plantId, selectedBotanicName]);
 
   const handleSubmit = (event: FormEvent): void => {
     event.preventDefault();
@@ -113,10 +108,14 @@ const AddPlant: React.FC<Props> = ({ onClose }) => {
         [theme.breakpoints.between('md', 'lg')]: {
           width: '540px',
         },
+        [theme.breakpoints.up('lg')]: {
+          width: '600px',
+        },
       }}
     >
       <Button
         sx={{
+          minWidth: 'unset',
           width: '24px',
           height: '24px',
           position: 'absolute',
@@ -147,7 +146,7 @@ const AddPlant: React.FC<Props> = ({ onClose }) => {
               onChange={handleSelectChange}
               required
             >
-              {plantBotanicNames.map((name, index) => (
+              {botanicNames.map((name, index) => (
                 <MenuItem key={index} value={name}>
                   {name}
                 </MenuItem>
