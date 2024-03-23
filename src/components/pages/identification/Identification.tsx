@@ -1,11 +1,23 @@
+import { Typography } from '@mui/material';
 import PlantsIdentificationForm from '../../plantIdentificationForm/PlantIdentificationForm';
 
 const Identification = () => {
   return (
-    <div>
-      <h1>Plants identification</h1>
+    <section
+      style={{
+        maxWidth: '95%',
+        width: '500px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '25px',
+      }}
+    >
+      <Typography align="center" variant="h4">
+        Plants identification
+      </Typography>
       <PlantsIdentificationForm />
-    </div>
+    </section>
   );
 };
 

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState, ChangeEvent, FormEvent } from 'react';
+import { Button, Typography, Snackbar, Alert } from '@mui/material';
 
 interface PlantIdData {
   confirmed: boolean;
@@ -16,14 +17,44 @@ interface PlantIdData {
   probability: number;
 }
 
+interface ImageData {
+  filename: string;
+  url: string;
+}
+
+interface MetaData {
+  date: string;
+  datetime: string;
+  latitude: number | null;
+  longitude: number | null;
+}
+
+interface PlantFullData {
+  countable: boolean;
+  custom_id: string | null;
+  fail_cause: number | null;
+  feedback: string | null;
+  finished_datetime: number;
+  id: number;
+  images: ImageData[];
+  is_plant: boolean;
+  is_plant_probability: number;
+  meta_data: MetaData;
+  modifiers: string[];
+  secret: string;
+  suggestions: PlantIdData[];
+  uploaded_datetime: number;
+}
+
 const PlantsIdentificationForm = () => {
   const [image, setImage] = useState<File | null>(null);
-  const [plantData, setPlantData] = useState<PlantIdData | null>(null);
+  const [plantData, setPlantData] = useState<PlantFullData | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const selectedFile = e.target.files?.item(0);
     if (selectedFile) {
-      console.log(selectedFile);
       setImage(selectedFile);
     }
   }
@@ -31,9 +62,10 @@ const PlantsIdentificationForm = () => {
   async function identifyPlant(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const url = 'https://api.plant.id/v2/identify';
-    const apiToken = 'EAlbqxzeTr8dhVrqSUO0w2Q2TyVZLXAgYBeftWY5XT00Oay4eL';
+    const API_KEY = import.meta.env.VITE_API_ID_KEY;
     if (!image) {
-      console.log('Please select an image file.');
+      setErrorMessage('Please select an image file.');
+      setOpenSnackbar(true);
       return;
     }
     const formData = new FormData();
@@ -41,39 +73,89 @@ const PlantsIdentificationForm = () => {
     try {
       const response = await axios.post(url, formData, {
         headers: {
-          'Api-Key': apiToken,
+          'Api-Key': API_KEY,
           'Content-Type': 'multipart/form-data',
         },
       });
 
       const { is_plant } = response.data;
-      const data: PlantIdData = response.data.suggestions[0];
+      const data: PlantFullData = response.data;
 
       if (is_plant) {
-        console.log(data);
         setPlantData(data);
-        console.log(plantData);
       } else {
-        console.log(response);
-        console.log('No plants on the photo');
+        setErrorMessage('No plants on the photo.');
+        setOpenSnackbar(true);
       }
     } catch (error) {
-      console.error('Error:', error);
+      setErrorMessage(`Error: ${error}`);
+      setOpenSnackbar(true);
     }
   }
 
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
-    <div>
-      <h1>Form</h1>
-      <form onSubmit={identifyPlant}>
-        <input type="file" onChange={handleChange} />
-        <button type="submit">Identify My Plant!</button>
+    <>
+      <form
+        onSubmit={identifyPlant}
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          width: '100%',
+        }}
+      >
+        <label htmlFor="upload">
+          <input
+            type="file"
+            onChange={handleChange}
+            style={{ display: 'none' }}
+            id="upload"
+          />
+          <Button
+            color="primary"
+            variant="contained"
+            component="span"
+            sx={{ color: '#fff', marginBottom: '10px' }}
+          >
+            Upload a photo
+          </Button>
+        </label>
+        <Button
+          type="submit"
+          color="primary"
+          variant="contained"
+          component="button"
+          sx={{ color: '#fff', marginBottom: '10px' }}
+        >
+          Identify My Plant!
+        </Button>
       </form>
       <div>
-        {plantData ? <h1>Your plant name is {plantData.plant_name}</h1> : null}
-        <h1></h1>
+        {plantData ? (
+          <Typography align="center" variant="h4">
+            Your plant name is {plantData.suggestions[0].plant_name}
+            <img
+              src={plantData.images[0].url}
+              alt={plantData.suggestions[0].plant_name}
+            />
+          </Typography>
+        ) : null}
       </div>
-    </div>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="error">
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 
