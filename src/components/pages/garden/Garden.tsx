@@ -50,7 +50,7 @@ const Garden = () => {
               fontSize: '2.75rem',
               mb: '30px',
             },
-            [theme.breakpoints.between('md', 'lg')]: {
+            [theme.breakpoints.up('md')]: {
               mb: '40px',
             },
           }}

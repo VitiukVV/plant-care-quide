@@ -21,7 +21,7 @@ const GardenList = () => {
           fontSize: '2.75rem',
           gap: '30px',
         },
-        [theme.breakpoints.between('md', 'lg')]: {
+        [theme.breakpoints.up('md')]: {
           gap: '40px',
         },
       }}
