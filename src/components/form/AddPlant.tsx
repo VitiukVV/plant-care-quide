@@ -1,7 +1,21 @@
-import { ChangeEvent, FormEvent, useContext, useState } from 'react';
-import { plantBotanicNames } from '../../data/plantBotanicNames';
-import { rooms } from '../../data/rooms';
 import CloseIcon from '@mui/icons-material/Close';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import { rooms } from '../../data/rooms';
+import {
+  fetchBotanicPlantDetails,
+  fetchBotanicPlantNames,
+} from '../../services/serviceAPI';
 import { PlantsList } from '../App';
 
 interface Props {
@@ -9,22 +23,55 @@ interface Props {
 }
 
 const AddPlant: React.FC<Props> = ({ onClose }) => {
-  const [selectedCommonName, setSelectedCommonName] = useState<string>('');
-  const [selectedBotanicName, setSelectedBotanicName] = useState<string>(
-    plantBotanicNames[0]
-  );
-  const [selectedRoom, setSelectedRoom] = useState<string>(rooms[0]);
-
   const plantsListData = useContext(PlantsList);
+  const theme = useTheme();
 
-  const handleSelect = (
-    e: ChangeEvent<HTMLSelectElement | HTMLInputElement>
-  ): void => {
+  const [selectedCommonName, setSelectedCommonName] = useState<string>('');
+  const [botanicNames, setBotanicNames] = useState<string[]>([]);
+  const [selectedBotanicName, setSelectedBotanicName] = useState<string>('');
+  const [selectedRoom, setSelectedRoom] = useState<string>(rooms[0]);
+  const [plantId, setPlantId] = useState<number>(0);
+  const [plantImgUrl, setPlantImgUrl] = useState<string>('');
+
+  useEffect(() => {
+    const getBotanicNames = async () => {
+      const result = await fetchBotanicPlantNames();
+      setBotanicNames(result[0].plantBotanicNames);
+    };
+
+    getBotanicNames();
+  }, []);
+
+  useEffect(() => {
+    const getBotanicPlantNames = async (selectedBotanicName: string) => {
+      try {
+        const result = await fetchBotanicPlantDetails(selectedBotanicName);
+
+        if (result.data.default_image && result.data.default_image.thumbnail) {
+          setPlantId(result.id);
+          setPlantImgUrl(result.data.default_image.thumbnail);
+        } else {
+          // If there is no thumbnail, we set the standard value
+          setPlantId(result.id);
+          setPlantImgUrl(
+            'https://perenual.com/storage/image/missing_image.jpg'
+          );
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    getBotanicPlantNames(selectedBotanicName);
+  }, [selectedBotanicName]);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSelectedCommonName(e.target.value);
+  };
+
+  const handleSelectChange = (e: SelectChangeEvent<string>) => {
     const { name } = e.target;
     switch (name) {
-      case 'commonName':
-        setSelectedCommonName(e.target.value);
-        break;
       case 'botanicName':
         setSelectedBotanicName(e.target.value);
         break;
@@ -44,84 +91,94 @@ const AddPlant: React.FC<Props> = ({ onClose }) => {
         commonName: selectedCommonName,
         botanicName: selectedBotanicName,
         room: selectedRoom,
+        plantID: plantId,
+        plantImgUrl,
       },
     ]);
     onClose();
   };
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         position: 'relative',
         padding: '40px',
         background: '#fff',
         borderRadius: '24px',
-        width: '540px',
+        [theme.breakpoints.between('md', 'lg')]: {
+          width: '540px',
+        },
+        [theme.breakpoints.up('lg')]: {
+          width: '600px',
+        },
       }}
     >
-      <button
-        style={{
+      <Button
+        sx={{
+          minWidth: 'unset',
           width: '24px',
           height: '24px',
           position: 'absolute',
           right: '16px',
           top: '16px',
-          padding: 0,
-          margin: 0,
           backgroundColor: 'transparent',
-          border: 'none',
         }}
         type="button"
         onClick={onClose}
       >
         <CloseIcon />
-      </button>
+      </Button>
       <form autoComplete="off" onSubmit={handleSubmit}>
-        <label>
-          Whats the name of your plant?
-          <input
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            label="Whats the name of your plant?"
             name="commonName"
-            onChange={handleSelect}
+            onChange={handleInputChange}
             type="text"
             required
           />
-        </label>
-        <br />
-        <label>
-          Botanical Name
-          <select
-            name="botanicName"
-            value={selectedBotanicName}
-            onChange={handleSelect}
-            required
+          <FormControl>
+            <InputLabel>Botanical Name</InputLabel>
+            <Select
+              name="botanicName"
+              label="Botanical Name"
+              value={selectedBotanicName}
+              onChange={handleSelectChange}
+              required
+            >
+              {botanicNames.map((name, index) => (
+                <MenuItem key={index} value={name}>
+                  {name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl>
+            <InputLabel>Room</InputLabel>
+            <Select
+              name="room"
+              label="room"
+              value={selectedRoom}
+              onChange={handleSelectChange}
+              required
+            >
+              {rooms.map((room, index) => (
+                <MenuItem key={index} value={room}>
+                  {room}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: theme.palette.primary.main, color: 'white' }}
+            type="submit"
           >
-            {plantBotanicNames.map((name, index) => (
-              <option key={index} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <br />
-        <label>
-          Room
-          <select
-            name="room"
-            value={selectedRoom}
-            onChange={handleSelect}
-            required
-          >
-            {rooms.map((room, index) => (
-              <option key={index} value={room}>
-                {room}
-              </option>
-            ))}
-          </select>
-        </label>
-        <br />
-        <button>Add to my Garden</button>
+            Add to my Garden
+          </Button>
+        </Box>
       </form>
-    </div>
+    </Box>
   );
 };
 

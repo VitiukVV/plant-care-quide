@@ -1,8 +1,8 @@
+import { ThemeProvider } from '@mui/material';
 import { createContext, lazy, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material';
-import createTheme from '@mui/material/styles/createTheme';
-
+import { DataItem, PlantsListType } from '../interface/interface';
+import { customColors } from '../theme/theme';
 import AppBar from './appBar/AppBar';
 import Home from './pages/home/Home';
 
@@ -11,29 +11,6 @@ const Garden = lazy(() => import('./pages/garden/Garden'));
 const Identification = lazy(
   () => import('./pages/identification/Identification')
 );
-
-const customColors = createTheme({
-  palette: {
-    primary: {
-      main: '#56817A',
-      light: '#D5E8DC',
-      dark: '#005844',
-      contrastText: '#9F9E9E',
-    },
-  },
-});
-
-export interface DataItem {
-  commonName: string;
-  botanicName: string;
-  room: string;
-}
-
-interface PlantsListType {
-  data: DataItem[];
-  addPlant: (newData: DataItem[]) => void;
-  removePlant: (plantIndex: number) => void;
-}
 
 export const PlantsList = createContext<PlantsListType>({
   data: [],
