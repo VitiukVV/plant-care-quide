@@ -10,7 +10,7 @@ const PlantsIdentificationForm = () => {
     open: boolean;
     message: string;
     severity: 'error' | 'success';
-  }>({ open: false, message: '', severity: 'error' });
+  }>({ open: false, message: '', severity: 'success' });
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const selectedFile = e.target.files?.item(0);
@@ -63,8 +63,8 @@ const PlantsIdentificationForm = () => {
   const handleCloseSnackbar = () => {
     setSnackbarState({
       open: false,
-      message: '',
-      severity: 'error',
+      message: snackbarState.message,
+      severity: snackbarState.severity,
     });
   };
 
