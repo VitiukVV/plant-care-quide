@@ -43,11 +43,13 @@ const Footer = () => {
         component="div"
         sx={{
           maxWidth: '1320px',
-          margin: '0 auto',
+          margin: '30px auto',
           padding: '10px 0',
           display: 'flex',
           justifyContent: 'space-between',
+          alignItems: 'center',
           flexWrap: 'wrap',
+          gap: '20px',
         }}
       >
         <BottomNavigation
@@ -55,7 +57,7 @@ const Footer = () => {
           value={value}
           sx={{
             display: 'flex',
-            flexWrap: 'wrap',
+            flexDirection: 'column',
             gap: '10px',
             bgcolor: 'inherit',
             maxWidth: '30%',
@@ -76,13 +78,19 @@ const Footer = () => {
             to="/garden"
             sx={bottomNavigationActionStyles}
           />
+          <BottomNavigationAction
+            label="Identification"
+            component={NavLink}
+            to="/identification"
+            sx={bottomNavigationActionStyles}
+          />
         </BottomNavigation>
         <Typography
           sx={{ textAlign: 'center', color: '#fff', maxWidth: '60%' }}
         >
           {footerText}
         </Typography>
-        <Logo />
+        <Logo style={{ alignSelf: 'self-end' }} />
       </Toolbar>
     </Box>
   );
