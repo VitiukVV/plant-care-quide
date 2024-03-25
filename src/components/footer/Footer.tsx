@@ -47,7 +47,6 @@ const Footer = () => {
           padding: '10px 0',
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
           flexWrap: 'wrap',
           gap: '20px',
         }}
@@ -90,7 +89,7 @@ const Footer = () => {
         >
           {footerText}
         </Typography>
-        <Logo style={{ alignSelf: 'self-end' }} />
+        <Logo style={{ marginLeft: 'auto', marginRight: 'auto' }} />
       </Toolbar>
     </Box>
   );
