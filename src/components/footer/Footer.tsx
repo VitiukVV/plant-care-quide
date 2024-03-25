@@ -61,7 +61,7 @@ const Footer = () => {
             bgcolor: 'inherit',
             maxWidth: '30%',
           }}
-          onChange={(_event: ChangeEvent<{}>, newValue: number) => {
+          onChange={(_event: ChangeEvent<unknown>, newValue: number) => {
             setValue(newValue);
           }}
         >
