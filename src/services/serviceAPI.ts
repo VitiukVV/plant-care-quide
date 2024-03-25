@@ -21,3 +21,22 @@ export const fetchBotanicPlantDetails = async (botanicName: string) => {
     console.error('Error fetching data:', error);
   }
 };
+
+const PLANT_ID_URL = 'https://api.plant.id/v2/identify';
+const PLANT_ID_API_KEY = import.meta.env.VITE_API_ID_KEY;
+
+export const postPlant = async (image: File) => {
+  const formData = new FormData();
+  formData.append('images', image);
+  try {
+    const response = await axios.post(PLANT_ID_URL, formData, {
+      headers: {
+        'Api-Key': PLANT_ID_API_KEY,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error identifying plant: ${error}`);
+  }
+};

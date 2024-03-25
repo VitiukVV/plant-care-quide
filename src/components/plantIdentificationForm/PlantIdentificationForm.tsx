@@ -1,57 +1,71 @@
-import axios from 'axios';
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { Button, Typography, Snackbar, Alert } from '@mui/material';
 import { PlantFullData } from './../../interface/interface';
+import { postPlant } from '../../services/serviceAPI';
 
 const PlantsIdentificationForm = () => {
   const [image, setImage] = useState<File | null>(null);
   const [plantData, setPlantData] = useState<PlantFullData | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarState, setSnackbarState] = useState<{
+    open: boolean;
+    message: string;
+    severity: 'error' | 'success';
+  }>({ open: false, message: '', severity: 'error' });
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const selectedFile = e.target.files?.item(0);
     if (selectedFile) {
       setImage(selectedFile);
+      setSnackbarState({
+        open: true,
+        message: 'Your photo was uploaded!',
+        severity: 'success',
+      });
     }
   }
 
   async function identifyPlant(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const url = 'https://api.plant.id/v2/identify';
-    const API_KEY = import.meta.env.VITE_API_ID_KEY;
     if (!image) {
-      setErrorMessage('Please select an image file.');
-      setOpenSnackbar(true);
+      setSnackbarState({
+        open: true,
+        message: 'Please select an image file.',
+        severity: 'error',
+      });
+
       return;
     }
     const formData = new FormData();
     formData.append('images', image);
     try {
-      const response = await axios.post(url, formData, {
-        headers: {
-          'Api-Key': API_KEY,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      const { is_plant } = response.data;
-      const data: PlantFullData = response.data;
+      const data = await postPlant(image);
+      const { is_plant } = data;
+      const plantData: PlantFullData = data;
 
       if (is_plant) {
-        setPlantData(data);
+        setPlantData(plantData);
       } else {
-        setErrorMessage('No plants on the photo.');
-        setOpenSnackbar(true);
+        setSnackbarState({
+          open: true,
+          message: 'No plants on the photo.',
+          severity: 'error',
+        });
       }
     } catch (error) {
-      setErrorMessage(`Error: ${error}`);
-      setOpenSnackbar(true);
+      setSnackbarState({
+        open: true,
+        message: `Error: ${error}`,
+        severity: 'error',
+      });
     }
   }
 
   const handleCloseSnackbar = () => {
-    setOpenSnackbar(false);
+    setSnackbarState({
+      open: false,
+      message: '',
+      severity: 'error',
+    });
   };
 
   return (
@@ -103,13 +117,13 @@ const PlantsIdentificationForm = () => {
         ) : null}
       </div>
       <Snackbar
-        open={openSnackbar}
+        open={snackbarState.open}
         autoHideDuration={4000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleCloseSnackbar} severity="error">
-          {errorMessage}
+        <Alert onClose={handleCloseSnackbar} severity={snackbarState.severity}>
+          {snackbarState.message}
         </Alert>
       </Snackbar>
     </>
