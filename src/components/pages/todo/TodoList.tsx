@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
-import { makeStyles } from '@mui/styles';
 import Checkbox from '@mui/material/Checkbox';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import { DatePicker } from '@mui/x-date-pickers';
 import { format } from 'date-fns';
 import { Task } from '../../../interface/interface';
+import { styled } from '@mui/system';
 
 const defaultPlantList =
   'https://hortology.co.uk/cdn/shop/files/Ficus-elastica-Melany-Rubber-Plant-14x45cm-Hadleigh-Plant-Pot-White-20x17.5cm_52335388-022e-4750-9c9f-54efbba9ea0a_1200x.jpg?v=1704197517';
@@ -22,46 +22,44 @@ const checkImageUrl = (imageUrl: string): boolean => {
   }
 };
 
-const useStyles = makeStyles(() => ({
-  listElement: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '16px',
-    padding: '12px',
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-    maxWidth: '400px',
-  },
-  image: {
-    display: 'inline-block',
-    width: '100px',
-    marginRight: '16px',
-    borderRadius: '8px',
-  },
-  form: {
-    marginBottom: '24px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    maxWidth: '800px',
-  },
-}));
+const ListElement = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '16px',
+  padding: '12px',
+  border: '1px solid #ccc',
+  borderRadius: '8px',
+  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+  maxWidth: '400px',
+});
+
+const Image = styled('img')({
+  display: 'inline-block',
+  width: '100px',
+  marginRight: '16px',
+  borderRadius: '8px',
+});
+
+const Form = styled('form')({
+  marginBottom: '24px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  maxWidth: '800px',
+});
 
 const TaskItem = ({ task, image, date }: Task) => {
-  const classes = useStyles();
   return (
-    <div className={classes.listElement}>
-      <img src={image} className={classes.image} alt="" />
+    <ListElement>
+      <Image src={image} alt="" />
       <span>{task}</span>
       <span>{format(date.$d, 'dd/MM/yyyy')}</span>
       <Checkbox />
-    </div>
+    </ListElement>
   );
 };
 
 const TodoList = () => {
-  const classes = useStyles();
   const [sortBy, setSortBy] = useState('asc');
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState('');
@@ -69,7 +67,7 @@ const TodoList = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [newDate, setNewDate] = useState<Date | null>(null);
 
-  const sortedTasks = tasks.toSorted((a, b) => {
+  const sortedTasks = tasks.sort((a, b) => {
     if (sortBy === 'asc') {
       return a.date.$d.getTime() - b.date.$d.getTime();
     } else {
@@ -133,7 +131,7 @@ const TodoList = () => {
           </Grid>
         </Grid>
       </div>
-      <form onSubmit={handleSubmit} className={classes.form}>
+      <Form onSubmit={handleSubmit}>
         <TextField
           label="New Task"
           variant="outlined"
@@ -160,7 +158,7 @@ const TodoList = () => {
         <Button type="submit" variant="contained" color="primary">
           Add Task
         </Button>
-      </form>
+      </Form>
       <div className="list">
         {sortedTasks.map((task, index) => (
           <TaskItem key={index + task.task} {...task} />
