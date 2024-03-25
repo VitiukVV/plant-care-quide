@@ -11,6 +11,7 @@ const Garden = lazy(() => import('./pages/garden/Garden'));
 const Identification = lazy(
   () => import('./pages/identification/Identification')
 );
+const TodoList = lazy(() => import('./pages/todo/TodoList'));
 
 export const PlantsList = createContext<PlantsListType>({
   data: [],
@@ -49,6 +50,7 @@ const App = () => {
             <Route path="garden" element={<Garden />} />
             <Route path="garden/:details" element={<Details />} />
             <Route path="identification" element={<Identification />} />
+            <Route path="todo" element={<TodoList />} />
             <Route path="*" element={<Home />} />
           </Route>
         </Routes>

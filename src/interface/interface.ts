@@ -55,3 +55,10 @@ export interface PlantFullData {
   suggestions: PlantIdData[];
   uploaded_datetime: number;
 }
+
+export interface Task {
+  task: string;
+  image: string;
+  date: Date;
+  isDone: boolean;
+}
