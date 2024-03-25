@@ -68,6 +68,12 @@ const AppBar = () => {
                 component={NavLink}
                 to="/garden"
               />
+              <Tab
+                label="Identification"
+                value="/identification"
+                component={NavLink}
+                to="/identification"
+              />
             </Tabs>
           )}
           {isMobile && (
@@ -87,6 +93,13 @@ const AppBar = () => {
         </MenuItem>
         <MenuItem component={NavLink} to="/garden" onClick={handleMenuClose}>
           Garden
+        </MenuItem>
+        <MenuItem
+          component={NavLink}
+          to="/identification"
+          onClick={handleMenuClose}
+        >
+          Identification
         </MenuItem>
       </Menu>
       <Box
