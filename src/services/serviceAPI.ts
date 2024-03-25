@@ -23,7 +23,7 @@ export const fetchBotanicPlantDetails = async (botanicName: string) => {
 };
 
 const PLANT_ID_URL = 'https://api.plant.id/v2/identify';
-const PLANT_ID_API_KEY = import.meta.env.VITE_API_ID_KEY;
+const PLANT_ID_API_KEY = import.meta.env.VITE_API_KEY_ID;
 
 export const postPlant = async (image: File) => {
   const formData = new FormData();
