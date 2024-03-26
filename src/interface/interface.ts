@@ -55,3 +55,26 @@ export interface PlantFullData {
   suggestions: PlantIdData[];
   uploaded_datetime: number;
 }
+
+export interface PlantDetails {
+  common_name: string;
+  sunlight: string;
+  family: string;
+  flower_color: string;
+  origin: string;
+  pruning_month: string;
+  description: string;
+  default_image: {
+    medium_url: string;
+  };
+  watering_general_benchmark: {
+    value: string;
+    unit: string;
+  };
+}
+
+export interface PlantDetailProps {
+  label: string;
+  value: string;
+  Icon: React.ComponentType;
+}
