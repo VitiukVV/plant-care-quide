@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { fetchBotanicPlantDetails } from '../../../services/serviceAPI';
 import { useParams } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
+import { PlantDetails, PlantDetailProps } from '../../../interface/interface';
 
 import {
+  Box,
   Typography,
   Card,
   CardContent,
@@ -14,24 +16,6 @@ import {
 } from '@mui/material';
 
 import Icons from '../../../icons/DetailsIcons';
-
-interface PlantDetails {
-  common_name: string;
-  sunlight: string;
-  family: string;
-  watering: string;
-  origin: string;
-  description: string;
-  default_image: {
-    medium_url: string;
-  };
-}
-
-interface PlantDetailProps {
-  label: string;
-  value: string;
-  Icon: React.ComponentType;
-}
 
 const Details = () => {
   const [plantDetails, setPlantDetails] = useState<PlantDetails | null>(null);
@@ -139,7 +123,7 @@ const Details = () => {
   };
 
   return (
-    <main>
+    <Box component="section">
       <Container
         sx={{
           paddingLeft: { xs: '1rem', md: '3rem' },
@@ -195,7 +179,7 @@ const Details = () => {
           </Typography>
         )}
       </Container>
-    </main>
+    </Box>
   );
 };
 
