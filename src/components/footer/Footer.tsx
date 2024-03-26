@@ -33,8 +33,8 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        position: 'fixed',
-        bottom: '0',
+        // position: 'stiky',
+        // bottom: '0',
         width: '100%',
         bgcolor: '#56817A',
       }}
@@ -43,8 +43,8 @@ const Footer = () => {
         component="div"
         sx={{
           maxWidth: '1320px',
-          margin: '30px auto',
-          padding: '10px 0',
+          margin: '0 auto',
+          padding: '50px 0',
           display: 'flex',
           justifyContent: 'space-between',
           flexWrap: 'wrap',

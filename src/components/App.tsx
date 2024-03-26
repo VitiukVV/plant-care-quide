@@ -5,7 +5,6 @@ import { DataItem, PlantsListType } from '../interface/interface';
 import { customColors } from '../theme/theme';
 import AppBar from './appBar/AppBar';
 import Home from './pages/home/Home';
-import Footer from './footer/Footer';
 
 const Details = lazy(() => import('./pages/details/Details'));
 const Garden = lazy(() => import('./pages/garden/Garden'));
@@ -53,7 +52,6 @@ const App = () => {
             <Route path="*" element={<Home />} />
           </Route>
         </Routes>
-        <Footer />
       </PlantsList.Provider>
     </ThemeProvider>
   );
