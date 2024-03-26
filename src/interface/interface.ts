@@ -60,11 +60,16 @@ export interface PlantDetails {
   common_name: string;
   sunlight: string;
   family: string;
-  watering: string;
+  flower_color: string;
   origin: string;
+  pruning_month: string;
   description: string;
   default_image: {
     medium_url: string;
+  };
+  watering_general_benchmark: {
+    value: string;
+    unit: string;
   };
 }
 

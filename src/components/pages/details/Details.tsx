@@ -35,17 +35,21 @@ const Details = () => {
     fetchDetails();
   }, [plantID]);
 
+  console.log(plantDetails);
+
   const renderPlantDetail = ({ label, value, Icon }: PlantDetailProps) => (
     <Typography
       variant="body1"
       sx={{
         display: 'flex',
+        gap: { xs: '0.5rem', md: '1rem' },
         alignItems: 'center',
         fontWeight: '500',
         fontSize: { xs: '0.9rem', md: '1.25rem' },
         textAlign: { xs: 'center', md: 'left' },
         lineHeight: '116%',
         marginBottom: '1.25rem',
+        paddingLeft: { xs: '0', md: '1rem' },
       }}
     >
       <Icon />
@@ -79,6 +83,7 @@ const Details = () => {
               fontSize: { xs: '2rem', md: '3rem' },
               lineHeight: '116%',
               marginBottom: '2.5rem',
+              paddingLeft: { xs: '0', md: '1rem' },
             }}
           >
             {plantDetails.common_name.charAt(0).toUpperCase() +
@@ -90,19 +95,29 @@ const Details = () => {
             Icon: Icons.WbSunny,
           })}
           {renderPlantDetail({
+            label: 'Flower Color',
+            value: plantDetails.flower_color,
+            Icon: Icons.FlowerColor,
+          })}
+          {renderPlantDetail({
             label: 'Plant Familly',
             value: plantDetails.family,
             Icon: Icons.Diversity3,
           })}
           {renderPlantDetail({
             label: 'Watering',
-            value: plantDetails.watering,
+            value: `${plantDetails.watering_general_benchmark.value} ${plantDetails.watering_general_benchmark.unit}`,
             Icon: Icons.WaterDrop,
           })}
           {renderPlantDetail({
             label: 'Origin',
             value: plantDetails.origin,
             Icon: Icons.Language,
+          })}
+          {renderPlantDetail({
+            label: 'Pruning Month',
+            value: plantDetails.pruning_month,
+            Icon: Icons.Pruning,
           })}
         </Grid>
         <Grid item xs={12} md={6}>
