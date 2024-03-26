@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Box, Tabs, Tab, IconButton, Menu, MenuItem } from '@mui/material';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import LogoComponent from '../../icons/Logo';
+import Footer from '../footer/Footer';
 
 const AppBar = () => {
   const location = useLocation();
@@ -109,12 +110,14 @@ const AppBar = () => {
           justifyContent: 'center',
           alignItems: 'center',
           marginTop: 5,
+          minHeight: 'calc(100vh - 356px)',
         }}
       >
         <Suspense fallback={<div>Loading...</div>}>
           <Outlet />
         </Suspense>
       </Box>
+      <Footer />
     </>
   );
 };
