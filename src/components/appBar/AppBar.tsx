@@ -110,7 +110,7 @@ const AppBar = () => {
           justifyContent: 'center',
           alignItems: 'center',
           marginTop: 5,
-          minHeight: 'calc(100vh - 312px)',
+          minHeight: 'calc(100vh - 356px)',
         }}
       >
         <Suspense fallback={<div>Loading...</div>}>
