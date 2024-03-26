@@ -11,11 +11,12 @@ export const fetchBotanicPlantNames = async () => {
   }
 };
 
-export const fetchBotanicPlantDetails = async (botanicName: string) => {
+export const fetchBotanicPlantDetails = async (plantID: string) => {
   try {
     const response = await axios.get(
-      `${API_URL}plantDetails?name=${encodeURIComponent(botanicName)}`
+      `${API_URL}plantDetails?id=${encodeURIComponent(plantID)}`
     );
+
     return response.data[0];
   } catch (error) {
     console.error('Error fetching data:', error);
