@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchBotanicPlantDetails } from '../../../services/serviceAPI';
+import { fetchBotanicPlantDetailsId } from '../../../services/serviceAPI';
 import { useParams } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { PlantDetails, PlantDetailProps } from '../../../interface/interface';
@@ -26,7 +26,7 @@ const Details = () => {
   useEffect(() => {
     const fetchDetails = async () => {
       if (plantID) {
-        const details = await fetchBotanicPlantDetails(plantID);
+        const details = await fetchBotanicPlantDetailsId(plantID);
         setPlantDetails(details.data);
         setLoading(false);
       }
