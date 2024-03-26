@@ -79,7 +79,10 @@ const PlantsListCard = ({ plantData, index }: PlantsListCardProps) => {
               padding: '4px 28px',
             }}
           >
-            <Link style={{ color: 'white' }} to={`${plantData.plantID}`}>
+            <Link
+              style={{ color: 'white' }}
+              to={`/garden/details/${plantData.plantID}`}
+            >
               Details
             </Link>
           </Button>
