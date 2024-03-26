@@ -12,12 +12,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install, lint, build 🔧
+        env:
+          VITE_API_KEY_ID: ${{ secrets.VITE_API_KEY_ID }}
         run: |
           npm install
           npm run lint
           npm run build
-        env:
-          VITE_API_KEY_ID: ${{ secrets.VITE_API_KEY_ID }}
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.0
