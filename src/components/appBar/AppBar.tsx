@@ -58,7 +58,11 @@ const AppBar = () => {
           </Box>
           {!isMobile && (
             <Tabs
-              value={location.pathname}
+              value={
+                location.pathname.startsWith('/garden/details')
+                  ? '/garden'
+                  : location.pathname
+              }
               indicatorColor="primary"
               textColor="primary"
             >

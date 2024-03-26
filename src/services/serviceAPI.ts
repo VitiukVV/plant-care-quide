@@ -22,6 +22,16 @@ export const fetchBotanicPlantDetails = async (botanicName: string) => {
   }
 };
 
+export const fetchBotanicPlantDetailsId = async (plantID: string) => {
+  try {
+    const response = await axios.get(`${API_URL}plantDetails?id=${plantID}`);
+
+    return response.data[0];
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
 const PLANT_ID_URL = 'https://api.plant.id/v2/identify';
 const PLANT_ID_API_KEY = import.meta.env.VITE_API_KEY_ID;
 
