@@ -3,6 +3,7 @@ import { fetchBotanicPlantDetailsId } from '../../../services/serviceAPI';
 import { useParams } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { PlantDetails, PlantDetailProps } from '../../../interface/interface';
+import BreadCrumbs from '../../breadcrumbs/Breadcrumbs';
 
 import {
   Box,
@@ -146,6 +147,7 @@ const Details = () => {
           marginBottom: { xs: '4.5rem', md: '7.5rem' },
         }}
       >
+        <BreadCrumbs plantName={plantDetails?.common_name} />
         <Typography
           component="h1"
           variant="h2"
