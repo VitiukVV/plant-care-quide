@@ -2,13 +2,8 @@ import { Avatar, Box, Button, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { DataItem } from '../../interface/interface';
+import { PlantsListCardProps } from '../../interface/interface';
 import { PlantsList } from '../App';
-
-interface PlantsListCardProps {
-  plantData: DataItem;
-  index: number;
-}
 
 const PlantsListCard = ({ plantData, index }: PlantsListCardProps) => {
   const plantsList = useContext(PlantsList);
