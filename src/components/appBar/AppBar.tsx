@@ -4,6 +4,7 @@ import { Box, Tabs, Tab, IconButton, Menu, MenuItem } from '@mui/material';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import LogoComponent from '../../icons/Logo';
 import Footer from '../footer/Footer';
+import Loader from '../loader/Loader';
 
 const AppBar = () => {
   const location = useLocation();
@@ -117,7 +118,7 @@ const AppBar = () => {
           minHeight: 'calc(100vh - 356px)',
         }}
       >
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loader />}>
           <Outlet />
         </Suspense>
       </Box>
