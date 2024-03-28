@@ -80,7 +80,8 @@ const TodoList = () => {
 
   const plantsList: PlantsListType = useContext(PlantsList);
 
-  const sortedTasks = tasks.toSorted((a, b) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const sortedTasks = tasks.slice().sort((a: any, b: any) => {
     if (sortBy === 'asc') {
       return a.date?.$d.getTime() - b.date?.$d.getTime();
     } else {
@@ -134,10 +135,11 @@ const TodoList = () => {
   };
 
   const handlePlantSelect = (event: SelectChangeEvent) => {
-    setSelectedPlant(event.target.value as number);
+    setSelectedPlant(event.target.value as unknown as number);
   };
 
-  const validateForm = (task: string, date: Date | null) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const validateForm = (task: string, date: any) => {
     if (task.trim() !== '' && date !== null) {
       setIsFormValid(true);
       setIsDateValid(isValid(date.$d));
@@ -158,7 +160,7 @@ const TodoList = () => {
     plantsList.tasks.map(task => {
       if (!task?.date?.$d) {
         task.date = {
-          $d: new Date(task.date),
+          $d: new Date(task.date ?? task.date?.$d),
         };
       }
     });
@@ -198,11 +200,10 @@ const TodoList = () => {
           margin="normal"
         />
         <Select
-          value={selectedPlant}
+          value={selectedPlant?.toString()}
           onChange={handlePlantSelect}
           displayEmpty
           fullWidth
-          margin="normal"
         >
           <MenuItem value="" disabled>
             Select a plant
@@ -215,11 +216,10 @@ const TodoList = () => {
         </Select>
         <DatePicker
           label="Date"
-          value={selectedDate}
-          onChange={handleNewDateChange}
-          fullWidth
-          margin="normal"
-          error={!isDateValid}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          value={selectedDate as any}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onChange={handleNewDateChange as any}
         />
 
         <Button
@@ -233,7 +233,7 @@ const TodoList = () => {
       </Form>
       <div className="list">
         {sortedTasks.map((task, index) => (
-          <TaskItem key={index + task.task} {...task} />
+          <TaskItem plantName={''} key={index + task.task} {...task} />
         ))}
       </div>
     </div>
