@@ -89,6 +89,10 @@ export interface Task {
   plant?: DataItem;
 }
 
+export interface PlantsListItemProps {
+  plantData: DataItem;
+}
+
 export interface PlantsListCardProps {
   plantData: DataItem;
   index: number;
