@@ -13,7 +13,7 @@ jobs:
 
       - name: Debug environment variables
         run: |
-              echo "VITE_API_KEY_ID=$VITE_API_KEY_ID"
+              echo "VITE_API_KEY_ID=${{ secrets.VITE_API_KEY_ID }}"
 
       - name: Install, lint, build 🔧
         env:
