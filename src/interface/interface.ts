@@ -84,7 +84,8 @@ export interface PlantDetailProps {
 export interface Task {
   task: string;
   image: string;
-  date: Date;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  date: any;
   isDone: boolean;
   plant?: DataItem;
 }
