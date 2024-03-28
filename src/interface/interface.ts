@@ -94,3 +94,7 @@ export interface PlantsListCardProps {
   plantData: DataItem;
   index: number;
 }
+
+export interface PlantsListItemProps {
+  plantData: DataItem;
+}
