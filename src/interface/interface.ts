@@ -8,8 +8,10 @@ export interface DataItem {
 
 export interface PlantsListType {
   data: DataItem[];
+  tasks: Task[];
   addPlant: (newData: DataItem[]) => void;
   removePlant: (plantIndex: number) => void;
+  addTask: (task: Task) => void;
 }
 
 export interface PlantIdData {
@@ -77,4 +79,17 @@ export interface PlantDetailProps {
   label: string;
   value: string;
   Icon: React.ComponentType;
+}
+
+export interface Task {
+  task: string;
+  image: string;
+  date: Date;
+  isDone: boolean;
+  plant?: DataItem;
+}
+
+export interface PlantsListCardProps {
+  plantData: DataItem;
+  index: number;
 }

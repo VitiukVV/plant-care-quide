@@ -80,6 +80,7 @@ const AppBar = () => {
                 component={NavLink}
                 to="/identification"
               />
+              <Tab label="Todo" value="/todo" component={NavLink} to="/todo" />
             </Tabs>
           )}
           {isMobile && (
