@@ -80,7 +80,7 @@ const TodoList = () => {
 
   const plantsList: PlantsListType = useContext(PlantsList);
 
-  const sortedTasks = tasks.sort((a, b) => {
+  const sortedTasks = tasks.toSorted((a, b) => {
     if (sortBy === 'asc') {
       return a.date?.$d.getTime() - b.date?.$d.getTime();
     } else {
@@ -106,7 +106,7 @@ const TodoList = () => {
         isDone: false,
         plantName:
           plantsList.data.find(plant => plant.plantID === selectedPlant)
-            ?.commonName || 'Unknown Plant',
+            ?.commonName ?? 'Unknown Plant',
         plantID: selectedPlant,
       };
 
@@ -152,7 +152,7 @@ const TodoList = () => {
       setNewDate(selectedDate);
       validateForm(newTask, selectedDate);
     }
-  }, [selectedDate]);
+  }, [newTask, selectedDate]);
 
   useEffect(() => {
     plantsList.tasks.map(task => {
@@ -164,7 +164,7 @@ const TodoList = () => {
     });
 
     setTasks(plantsList.tasks);
-  }, []);
+  }, [plantsList.tasks]);
 
   return (
     <div>
