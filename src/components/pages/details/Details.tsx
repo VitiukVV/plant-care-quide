@@ -36,8 +36,6 @@ const Details = () => {
     fetchDetails();
   }, [plantID]);
 
-  console.log(plantDetails);
-
   const renderPlantDetail = ({ label, value, Icon }: PlantDetailProps) => (
     <Typography
       variant="body1"

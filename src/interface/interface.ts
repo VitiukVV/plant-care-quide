@@ -78,3 +78,7 @@ export interface PlantDetailProps {
   value: string;
   Icon: React.ComponentType;
 }
+
+export interface PlantsListItemProps {
+  plantData: DataItem;
+}
