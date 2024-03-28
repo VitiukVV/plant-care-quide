@@ -26,6 +26,9 @@ const Footer = () => {
       case '/identification':
         setValue('Identification');
         break;
+      case '/todo':
+        setValue('Todo');
+        break;
     }
   }, [location.pathname]);
 
@@ -100,6 +103,13 @@ const Footer = () => {
             value="Identification"
             component={NavLink}
             to="/identification"
+            sx={bottomNavigationActionStyles}
+          />
+          <BottomNavigationAction
+            label="Todo"
+            value="Todo"
+            component={NavLink}
+            to="/todo"
             sx={bottomNavigationActionStyles}
           />
         </BottomNavigation>
